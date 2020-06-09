@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <div class="menuPg">
+        <div>Menu</div>
+        <form>
+            <div id="menuPg-lvl">Level: 1</div>
+            <input type="range" min="1" max="5" step="1" value="1" class="btn-lvl">
+            <input type="button" value="Start" class="btn-strt btn_style">
+        </form>
+    </div>
+    <div class="gamePg hidden">
+        <form>
+            <input type="button" value="Menu" class="btn-menu btn_style">
+            <input type="button" value="Mute" class="btn-mute btn_style">
+        </form>
+        <div class="gamePg-stats">
+            <div class="gamePg-info">
+                <div class="gamePg-nextFigure">Field</div>
+                <div id="gamePg-lvl" class="gamePg-level">Level: 1</div>
+            </div>
+            <div class="gamePg-frontTetris"></div>
+            <div class="gamePg-score">
+                <div class="gamePg-record">Best score: 12000</div>
+                <div class="gamePG-currScore">Score: 12000</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js">
+    </script>
+</body>
+
+</html>
