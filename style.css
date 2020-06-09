@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    background: #000;
+    color: #fff;
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 25px 70px;
+    font-size: 24px;
+    min-height: 100%;
+}
+
+a,
+a:visited {
+    color: #fff;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.menuPg {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.menuPg>form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.lvl-btn {
+    width: 150px;
+    margin-top: 20px;
+}
+
+.btn-strt {
+    margin-top: 40px;
+}
+
+.gamePg {
+    margin: 0 auto;
+}
+
+.gamePg>form {
+    width: 1000px;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.gamePg-stats {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.gamePg-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.gamePg-score {
+    display: flex;
+    flex-direction: column;
+}
+
+.gamePg-frontTetris {
+    display: flex;
+    align-self: center;
+    position: relative;
+    width: 500px;
+    height: 700px;
+    border: 1px solid #fff;
+    overflow: hidden;
+}
+
+.gamePg-backTetris {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
+    position: absolute;
+    bottom: 0;
+    background: #fff;
+    width: 500px;
+    height: 900px;
+}
+
+.excel {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgb(241, 71, 71);
+}
+
+.figure,
+.set {
+    background: rgb(34, 161, 45);
+}
+
+.btn_style {
+    font-size: 24px;
+    width: 80px;
+    height: 40px;
+    background: #fff;
+    border-radius: 23px;
+    padding: 5px;
+    border: none;
+}
+
+.hidden {
+    display: none;
+}
