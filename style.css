@@ -10,12 +10,13 @@ html {
 body {
     display: flex;
     background: #000;
-    color: #fff;
     margin: 0 auto;
     max-width: 1100px;
     padding: 25px 70px;
-    font-size: 24px;
+    font-size: 28px;
     min-height: 100%;
+    font-family: 'Ultra', serif;
+    color: #FFB800;
 }
 
 a,
@@ -30,7 +31,7 @@ a:hover {
 }
 
 .menuPg {
-    margin: 0 auto;
+    margin: auto;
     text-align: center;
 }
 
@@ -39,10 +40,10 @@ a:hover {
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
-.lvl-btn {
+.btn-lvl {
     width: 150px;
     margin-top: 20px;
 }
@@ -52,21 +53,20 @@ a:hover {
 }
 
 .gamePg {
+    display: flex;
+    width: 1000px;
+    justify-content: space-between;
     margin: 0 auto;
 }
 
-.gamePg>form {
-    width: 1000px;
+.gamePg-leftBar {
     display: flex;
-    padding: 20px;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.gamePg-stats {
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
+    order: 1;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 200px;
+    align-items: flex-start;
+    text-align: left;
 }
 
 .gamePg-info {
@@ -74,19 +74,24 @@ a:hover {
     flex-direction: column;
 }
 
-.gamePg-score {
+.gamePg-rightBar {
     display: flex;
     flex-direction: column;
+    order: 3;
+    justify-content: space-around;
+    width: 200px;
+    align-items: flex-end;
+    text-align: right;
 }
 
 .gamePg-frontTetris {
     display: flex;
     align-self: center;
+    order: 2;
     position: relative;
-    width: 500px;
-    height: 700px;
-    border: 1px solid #fff;
     overflow: hidden;
+    border-top: 1px solid red;
+    border-left: 1px solid red;
 }
 
 .gamePg-backTetris {
@@ -96,29 +101,32 @@ a:hover {
     position: absolute;
     bottom: 0;
     background: #fff;
-    width: 500px;
-    height: 900px;
-}
-
-.excel {
-    width: 48px;
-    height: 48px;
-    border: 1px solid rgb(241, 71, 71);
 }
 
 .figure,
 .set {
-    background: rgb(34, 161, 45);
+    background-color: #FFB800;
 }
 
 .btn_style {
-    font-size: 24px;
-    width: 80px;
-    height: 40px;
-    background: #fff;
+    font-family: 'Ultra', serif;
+    font-size: 26px;
+    width: 100px;
+    height: 50px;
+    background: #FFB800;
     border-radius: 23px;
     padding: 5px;
     border: none;
+    transition-property: background-color;
+    transition-duration: .3s;
+}
+
+.btn_style:hover {
+    background: rgb(245, 92, 3);
+}
+
+.btn_style:focus {
+    outline: none
 }
 
 .hidden {
