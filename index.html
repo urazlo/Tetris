@@ -8,27 +8,26 @@
 </head>
 
 <body>
-    <div class="menuPg">
+    <div class="menu-page">
         <div style="font-size: 45px;">Menu</div>
-        <form>
-            <div id="menuPg-lvl">Level: 1</div>
-            <input type="range" min="1" max="5" step="1" value="1" class="btn-lvl">
-            <input type="button" value="Start" class="btn-strt btn_style">
-        </form>
-    </div>
-    <div class="gamePg hidden">
-        <div class="gamePg-leftBar">
-            <input type="button" value="Menu" class="btn-menu btn_style">
-            <div class="gamePg-nextFigure">Field</div>
-            <div id="gamePg-lvl">Level: 1</div>
+        <div class="menu-page__elems">
+            <div id="menu-page-lvl">Level: 1</div>
+            <input type="range" min="1" max="5" step="1" value="1" class="menu-page__btn-lvl">
+            <button class="menu-page__btn-start btn--style">Start</button>
         </div>
-        <div class="gamePg-rightBar">
-            <input type="button" value="Mute" class="btn-mute btn_style">
-            <div class="gamePG-score">Score: <br> 12000</div>
-            <div class="gamePg-record">Best score: 12000</div>
-        </div>
-        <div class="gamePg-frontTetris"></div>
     </div>
+    <div class="game-page hidden">
+        <div class="game-page__left-bar">
+            <button class="game-page__left-bar__btn-menu btn--style">Menu</button>
+            <div class="game-page__left-bar__next-figure">Field</div>
+            <div id="game-page-lvl">Level: 1</div>
+        </div>
+        <div class="game-page__right-bar">
+            <button class="game-page__right-bar__btn-mute btn--style">Mute</button>
+            <div class="game-page__right-bar__score">Score: <br> 12000</div>
+            <div class="game-page__right-bar__record">Best score: 12000</div>
+        </div>
+        <div class="game-page__tetris-front"></div>
     </div>
     <script src="script.js">
     </script>
