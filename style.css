@@ -19,23 +19,12 @@ body {
     color: #FFB800;
 }
 
-a,
-a:visited {
-    color: #fff;
-    text-decoration: underline;
-}
-
-a:hover {
-    color: #fff;
-    text-decoration: none;
-}
-
-.menuPg {
+.menu-page {
     margin: auto;
     text-align: center;
 }
 
-.menuPg>form {
+.menu-page__elems {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,23 +32,23 @@ a:hover {
     margin-top: 100px;
 }
 
-.btn-lvl {
+.menu-page__btn-lvl {
     width: 150px;
     margin-top: 20px;
 }
 
-.btn-strt {
+.menu-page__btn-start {
     margin-top: 40px;
 }
 
-.gamePg {
+.game-page {
     display: flex;
     width: 1000px;
     justify-content: space-between;
     margin: 0 auto;
 }
 
-.gamePg-leftBar {
+.game-page__left-bar {
     display: flex;
     order: 1;
     flex-direction: column;
@@ -69,12 +58,7 @@ a:hover {
     text-align: left;
 }
 
-.gamePg-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.gamePg-rightBar {
+.game-page__right-bar {
     display: flex;
     flex-direction: column;
     order: 3;
@@ -84,17 +68,17 @@ a:hover {
     text-align: right;
 }
 
-.gamePg-frontTetris {
+.game-page__tetris-front {
     display: flex;
     align-self: center;
     order: 2;
     position: relative;
     overflow: hidden;
-    border-top: 1px solid red;
-    border-left: 1px solid red;
+    border-top: 1px solid #FFB800;
+    border-left: 1px solid #FFB800;
 }
 
-.gamePg-backTetris {
+.game-page__tetris-back {
     display: flex;
     overflow: hidden;
     flex-wrap: wrap;
@@ -103,12 +87,15 @@ a:hover {
     background: #fff;
 }
 
-.figure,
+.figure {
+    background-color: rgb(10, 108, 255);
+}
+
 .set {
     background-color: #FFB800;
 }
 
-.btn_style {
+.btn--style {
     font-family: 'Ultra', serif;
     font-size: 26px;
     width: 100px;
@@ -121,11 +108,11 @@ a:hover {
     transition-duration: .3s;
 }
 
-.btn_style:hover {
+.btn--style:hover {
     background: rgb(245, 92, 3);
 }
 
-.btn_style:focus {
+.btn--style:focus {
     outline: none
 }
 
