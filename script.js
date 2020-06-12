@@ -15,9 +15,6 @@ const cells = document.getElementsByClassName('excel');
 const inicialX = 5;
 const inicialY = 15;
 
-const interval = setInterval(() => {
-    move();
-}, 1000);
 
 const figuresArray = [
     // вертикальная палка
@@ -98,44 +95,12 @@ document.addEventListener("keydown", function(event) {
 
 // Перемещение фигуры по нажатию клавиш
 window.addEventListener('keydown', function(event) {
-
-    let coordinates1 = [figureBody[0].getAttribute('posX'), figureBody[0].getAttribute('posY')];
-    let coordinates2 = [figureBody[1].getAttribute('posX'), figureBody[1].getAttribute('posY')];
-    let coordinates3 = [figureBody[2].getAttribute('posX'), figureBody[2].getAttribute('posY')];
-    let coordinates4 = [figureBody[3].getAttribute('posX'), figureBody[3].getAttribute('posY')];
-
-    function getNewState(direction) {
-        flag = true;
-        let figureNew = [
-            document.querySelector(`[posX = "${+coordinates1[0]+direction}"][posY= "${coordinates1[1]}"]`),
-            document.querySelector(`[posX = "${+coordinates2[0]+direction}"][posY= "${coordinates2[1]}"]`),
-            document.querySelector(`[posX = "${+coordinates3[0]+direction}"][posY= "${coordinates3[1]}"]`),
-            document.querySelector(`[posX = "${+coordinates4[0]+direction}"][posY= "${coordinates4[1]}"]`),
-        ];
-
-        for (let i = 0; i < figureNew.length; i++) {
-            if (!figureNew[i] || figureNew[i].classList.contains('set')) {
-                flag = false;
-            }
-        }
-        if (flag) {
-            for (let i = 0; i < figureBody.length; i++) {
-                figureBody[i].classList.remove('figure');
-            }
-
-            figureBody = figureNew;
-
-            for (let i = 0; i < figureBody.length; i++) {
-                figureBody[i].classList.add('figure');
-            }
-        }
-    }
     if (event.keyCode == 37) {
-        getNewState(-1);
+        move(-1, 0);
     } else if (event.keyCode == 39) {
-        getNewState(1);
+        move(1, 0);
     } else if (event.keyCode == 40) {
-        move();
+        move(0, -1);
     }
 });
 
@@ -185,7 +150,7 @@ function getFigure() {
 
 // Передвижение фигуры с проверкой столкновения
 
-function move() {
+function move(xDirection, yDirection) {
     let moveFlag = true;
     let coordinates = [
         [figureBody[0].getAttribute('posX'), figureBody[0].getAttribute('posY')],
@@ -194,35 +159,59 @@ function move() {
         [figureBody[3].getAttribute('posX'), figureBody[3].getAttribute('posY')],
     ];
 
-    for (let i = 0; i < coordinates.length; i++) {
-        if (coordinates[i][1] == 1 || document.querySelector(`[posX = "${coordinates[i][0]}"][posY= "${coordinates[i][1]-1}"]`).classList.contains('set')) {
-            moveFlag = false;
-            break;
+    if (yDirection == -1) {
+        for (let i = 0; i < coordinates.length; i++) {
+            if (coordinates[i][1] == 1 || document.querySelector(`[posX = "${coordinates[i][0]}"][posY= "${coordinates[i][1]-1}"]`).classList.contains('set')) {
+                moveFlag = false;
+                break;
+            }
         }
-    }
-    if (moveFlag) {
-        for (let i = 0; i < figureBody.length; i++) {
-            figureBody[i].classList.remove('figure');
+        if (moveFlag) {
+            for (let i = 0; i < figureBody.length; i++) {
+                figureBody[i].classList.remove('figure');
+            }
+            figureBody = changeFigureBody(coordinates, xDirection, yDirection);
+            for (let i = 0; i < figureBody.length; i++) {
+                figureBody[i].classList.add('figure');
+            }
+        } else {
+            for (let i = 0; i < figureBody.length; i++) {
+                figureBody[i].classList.remove('figure');
+                figureBody[i].classList.add('set');
+            }
+            getFigure();
         }
-        figureBody = [
-            document.querySelector(`[posX = "${coordinates[0][0]}"][posY= "${coordinates[0][1]-1}"]`),
-            document.querySelector(`[posX = "${coordinates[1][0]}"][posY= "${coordinates[1][1]-1}"]`),
-            document.querySelector(`[posX = "${coordinates[2][0]}"][posY= "${coordinates[2][1]-1}"]`),
-            document.querySelector(`[posX = "${coordinates[3][0]}"][posY= "${coordinates[3][1]-1}"]`),
-        ];
-        for (let i = 0; i < figureBody.length; i++) {
-            figureBody[i].classList.add('figure');
+    } else if (xDirection == 1 || xDirection == -1) {
+
+        let newFigureBody = changeFigureBody(coordinates, xDirection, yDirection);
+        for (let i = 0; i < newFigureBody.length; i++) {
+            if (!newFigureBody[i] || newFigureBody[i].classList.contains('set')) {
+                moveFlag = false;
+            }
         }
-    } else {
-        for (let i = 0; i < figureBody.length; i++) {
-            figureBody[i].classList.remove('figure');
-            figureBody[i].classList.add('set');
+        if (moveFlag) {
+            for (let i = 0; i < figureBody.length; i++) {
+                figureBody[i].classList.remove('figure');
+            }
+
+            figureBody = newFigureBody;
+
+            for (let i = 0; i < figureBody.length; i++) {
+                figureBody[i].classList.add('figure');
+            }
         }
-        getFigure();
     }
 }
-
-
+// Изменение координат фигуры
+function changeFigureBody(coordinates, xDirection, yDirection) {
+    let newFigureBody = [
+        document.querySelector(`[posX = "${+coordinates[0][0]+xDirection}"][posY= "${+coordinates[0][1]+yDirection}"]`),
+        document.querySelector(`[posX = "${+coordinates[1][0]+xDirection}"][posY= "${+coordinates[1][1]+yDirection}"]`),
+        document.querySelector(`[posX = "${+coordinates[2][0]+xDirection}"][posY= "${+coordinates[2][1]+yDirection}"]`),
+        document.querySelector(`[posX = "${+coordinates[3][0]+xDirection}"][posY= "${+coordinates[3][1]+yDirection}"]`),
+    ];
+    return newFigureBody;
+}
 //Устанавливаем размеры клетки
 function setCellSize() {
 
@@ -240,6 +229,14 @@ function setTetrisFieldSize() {
     document.querySelector('.game-page__tetris-back').style.width = `${tetrisFieldWidth}px`;
     document.querySelector('.game-page__tetris-front').style.height = `${tetrisFrontFieldHeight}px`;
 }
+
+function startGame(params) {
+
+}
+interval = setInterval(() => {
+    move(0, -1);
+}, 1000);
+
 
 drawFill();
 setCellsCoorinates();
