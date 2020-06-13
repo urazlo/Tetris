@@ -17,6 +17,7 @@ body {
     min-height: 100%;
     font-family: 'Ultra', serif;
     color: #FFB800;
+    overflow: hidden;
 }
 
 .menu-page {
@@ -88,10 +89,6 @@ body {
 }
 
 .figure {
-    background-color: rgb(10, 108, 255);
-}
-
-.set {
     background-color: rgb(10, 108, 255);
 }
 
