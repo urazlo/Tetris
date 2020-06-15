@@ -54,7 +54,7 @@ body {
     order: 1;
     flex-direction: column;
     justify-content: space-around;
-    width: 200px;
+    width: 250px;
     align-items: flex-start;
     text-align: left;
 }
@@ -64,7 +64,7 @@ body {
     flex-direction: column;
     order: 3;
     justify-content: space-around;
-    width: 200px;
+    width: 250px;
     align-items: flex-end;
     text-align: right;
 }
