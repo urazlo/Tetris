@@ -13,13 +13,14 @@ const tetrisFrontField = document.getElementsByClassName('game-page__tetris-fron
 const excel = document.getElementsByClassName('cell');
 const cellsArray = document.getElementsByClassName('cell');
 const inicialX = 5;
-const inicialY = 10;
+const inicialY = 15;
 let interval;
 let gameStatus = true;
 let gameSpeed;
 let currentFigure = 0;
 let figureBody = 0;
 let rotate = 1;
+let rotationFlag = true;
 
 let figuresArray = [
     [
@@ -242,7 +243,7 @@ menuHider.addEventListener('click', () => {
     document.querySelector('.game-page').classList.toggle('hidden');
     gameSpeed = 1200 - level.value * 100;
     gameStatus = true;
-    // setGameStatus(gameStatus, gameSpeed);
+    setGameStatus(gameStatus, gameSpeed);
 });
 menuOpener.addEventListener('click', () => {
     document.querySelector('.menu-page').classList.toggle('hidden');
@@ -349,38 +350,44 @@ function move(xDirection, yDirection) {
         }
     } else if (xDirection == 1 || xDirection == -1) {
         let figureNew = changeFigureBodyCoordinates(coordinates, xDirection, yDirection);
-        checkNeighbourBlock(figureNew, moveFlag);
+        for (let i = 0; i < figureNew.length; i++) {
+            if (!figureNew[i] || figureNew[i].hasAttribute('stuckedFigure')) {
+                moveFlag = false;
+            }
+        }
+        if (moveFlag) {
+            removeFigureClass(figureBody);
+            figureBody = figureNew;
+            addFigureClass(figureBody);
+        }
     } else if (yDirection == 1) {
-
+        rotationFlag = true;
         let figureNew = [
             document.querySelector(`[posX = "${+coordinates[0][0] + figuresArray[currentFigure][rotate + 2][0][0]}"][posY = "${
-            +coordinates[0][1] + figuresArray[currentFigure][rotate + 2][0][1]}"]`),
+          +coordinates[0][1] + figuresArray[currentFigure][rotate + 2][0][1]}"]`),
             document.querySelector(`[posX = "${+coordinates[1][0] + figuresArray[currentFigure][rotate + 2][1][0]}"][posY = "${
-            +coordinates[1][1] + figuresArray[currentFigure][rotate + 2][1][1]}"]`),
+          +coordinates[1][1] + figuresArray[currentFigure][rotate + 2][1][1]}"]`),
             document.querySelector(`[posX = "${+coordinates[2][0] + figuresArray[currentFigure][rotate + 2][2][0]}"][posY = "${
-            +coordinates[2][1] + figuresArray[currentFigure][rotate + 2][2][1]}"]`),
+          +coordinates[2][1] + figuresArray[currentFigure][rotate + 2][2][1]}"]`),
             document.querySelector(`[posX = "${+coordinates[3][0] + figuresArray[currentFigure][rotate + 2][3][0]}"][posY = "${
-            +coordinates[3][1] + figuresArray[currentFigure][rotate + 2][3][1]}"]`),
+          +coordinates[3][1] + figuresArray[currentFigure][rotate + 2][3][1]}"]`),
         ];
-        checkNeighbourBlock(figureNew, moveFlag);
-        if (rotate < 4) {
-            rotate++;
-        } else {
-            rotate = 1;
+        for (let i = 0; i < figureNew.length; i++) {
+            if (!figureNew[i] || figureNew[i].hasAttribute('stuckedFigure')) {
+                rotationFlag = false;
+            }
         }
-    }
-}
+        if (rotationFlag) {
+            removeFigureClass(figureBody);
+            figureBody = figureNew;
+            addFigureClass(figureBody);
 
-function checkNeighbourBlock(figureNew, moveFlag) {
-    for (let i = 0; i < figureNew.length; i++) {
-        if (!figureNew[i] || figureNew[i].hasAttribute('stuckedFigure')) {
-            moveFlag = false;
+            if (rotate < 4) {
+                rotate++;
+            } else {
+                rotate = 1;
+            }
         }
-    }
-    if (moveFlag) {
-        removeFigureClass(figureBody);
-        figureBody = figureNew;
-        addFigureClass(figureBody);
     }
 }
 
