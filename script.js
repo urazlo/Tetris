@@ -21,7 +21,6 @@ let currentFigure = 0;
 let figureBody = 0;
 let rotate = 1;
 let rotationFlag = true;
-
 let figuresArray = [
     [
         [0, 1],
@@ -342,9 +341,37 @@ function move(xDirection, yDirection) {
             figureBody = changeFigureBodyCoordinates(coordinates, xDirection, yDirection);
             addFigureClass(figureBody);
         } else {
-
             for (let i = 0; i < figureBody.length; i++) {
                 figureBody[i].setAttribute('stuckedFigure', '');
+            }
+            for (let i = 1; i < 15; i++) {
+                let count = 0;
+                for (let k = 1; k < 11; k++) {
+                    if (document.querySelector(`[posX = "${k}"][posY = "${i}"]`).hasAttribute('stuckedFigure')) {
+                        count++;
+                        if (count == 10) {
+                            for (let m = 1; m < 11; m++) {
+                                document.querySelector(`[posX = "${m}"][posY = "${i}"]`).removeAttribute('stuckedFigure');
+                                document.querySelector(`[posX = "${m}"][posY = "${i}"]`).classList.remove('figure');
+                            }
+                            let stuckedFiguresArray = Array.from(document.querySelectorAll('[stuckedFigure]'));
+                            let newStuckedFiguresArray = [];
+                            for (let s = 0; s < stuckedFiguresArray.length; s++) {
+                                let stuckedFiguresCoordinates = [stuckedFiguresArray[s].getAttribute('posX'), stuckedFiguresArray[s].getAttribute('posY')];
+                                if (stuckedFiguresCoordinates[1] > i) {
+                                    stuckedFiguresArray[s].removeAttribute('stuckedFigure');
+                                    stuckedFiguresArray[s].classList.remove('figure');
+                                    newStuckedFiguresArray.push(document.querySelector(`[posX = "${stuckedFiguresCoordinates[0]}"][posY = "${stuckedFiguresCoordinates[1]-1}"]`));
+                                }
+                            }
+                            for (let a = 0; a < newStuckedFiguresArray.length; a++) {
+                                newStuckedFiguresArray[a].setAttribute('stuckedFigure', '');
+                                newStuckedFiguresArray[a].classList.add('figure');
+                            }
+                            i--;
+                        }
+                    }
+                }
             }
             getFigure();
         }
