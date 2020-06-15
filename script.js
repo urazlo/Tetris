@@ -14,6 +14,10 @@ const excel = document.getElementsByClassName('cell');
 const cellsArray = document.getElementsByClassName('cell');
 const inicialX = 5;
 const inicialY = 15;
+let gameStat = {
+    score: 200,
+    record: 300,
+};
 let interval;
 let gameStatus = true;
 let gameSpeed;
@@ -242,6 +246,7 @@ menuHider.addEventListener('click', () => {
     document.querySelector('.game-page').classList.toggle('hidden');
     gameSpeed = 1200 - level.value * 100;
     gameStatus = true;
+    gameStat.score = 0;
     setGameStatus(gameStatus, gameSpeed);
 });
 menuOpener.addEventListener('click', () => {
@@ -250,6 +255,7 @@ menuOpener.addEventListener('click', () => {
     gameStatus = false;
     setGameStatus(gameStatus, gameSpeed);
 });
+
 
 
 // Перемещение фигуры по нажатию клавиш
@@ -345,11 +351,17 @@ function move(xDirection, yDirection) {
                 figureBody[i].setAttribute('stuckedFigure', '');
             }
             for (let i = 1; i < 15; i++) {
-                let count = 0;
+                let fullLineCount = 0;
                 for (let k = 1; k < 11; k++) {
                     if (document.querySelector(`[posX = "${k}"][posY = "${i}"]`).hasAttribute('stuckedFigure')) {
-                        count++;
-                        if (count == 10) {
+                        fullLineCount++;
+                        if (fullLineCount == 10) {
+                            gameStat.score += 100;
+                            document.getElementsByClassName('game-page__right-bar__score')[0].textContent = `Score: ${gameStat.score}`;
+                            document.getElementsByClassName('game-page__right-bar__record')[0].textContent = `Record: ${gameStat.score}`;
+                            if (gameStat.score > gameStat.record) {
+                                gameStat.record = gameStat.score;
+                            }
                             for (let m = 1; m < 11; m++) {
                                 document.querySelector(`[posX = "${m}"][posY = "${i}"]`).removeAttribute('stuckedFigure');
                                 document.querySelector(`[posX = "${m}"][posY = "${i}"]`).classList.remove('figure');
@@ -371,6 +383,16 @@ function move(xDirection, yDirection) {
                             i--;
                         }
                     }
+                }
+            }
+            for (let n = 1; n < 11; n++) {
+                if (document.querySelector(`[posX = "${n}"][posY = "15"]`).hasAttribute('stuckedFigure')) {
+                    setGameStatus(false, gameSpeed);
+                    gameStat.record = gameStat.score;
+                    confirm(`Game over. Your score is ${gameStat.score}. The record is ${gameStat.record}`);
+                    document.querySelector('.menu-page').classList.toggle('hidden');
+                    document.querySelector('.game-page').classList.toggle('hidden');
+                    break;
                 }
             }
             getFigure();
@@ -408,7 +430,6 @@ function move(xDirection, yDirection) {
             removeFigureClass(figureBody);
             figureBody = figureNew;
             addFigureClass(figureBody);
-
             if (rotate < 4) {
                 rotate++;
             } else {
