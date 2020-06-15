@@ -13,7 +13,7 @@ const tetrisFrontField = document.getElementsByClassName('game-page__tetris-fron
 const excel = document.getElementsByClassName('cell');
 const cellsArray = document.getElementsByClassName('cell');
 const inicialX = 5;
-const inicialY = 15;
+const inicialY = 10;
 let interval;
 let gameStatus = true;
 let gameSpeed;
@@ -85,28 +85,28 @@ let figuresArray = [
         [0, 1],
         [0, 2],
         [
-            [0, 0],
+            [0, 2],
             [-1, 1],
-            [1, 0],
-            [2, -1]
+            [1, 1],
+            [2, 0]
         ],
         [
+            [2, 0],
+            [1, 1],
             [1, -1],
+            [0, -2]
+        ],
+        [
+            [0, -2],
             [1, -1],
-            [-1, 0],
-            [-1, 0]
-        ],
-        [
-            [-1, 0],
-            [0, -1],
-            [2, -2],
-            [1, -1]
-        ],
-        [
-            [0, -1],
-            [0, -1],
-            [-2, 0],
+            [-1, -1],
             [-2, 0]
+        ],
+        [
+            [-2, 0],
+            [-1, -1],
+            [-1, 1],
+            [0, 2]
         ]
     ],
     [
@@ -231,7 +231,7 @@ let figuresArray = [
 
 //Отображение уровня
 level.addEventListener('mouseup', () => {
-    const value = level.value;
+    let value = level.value;
     document.getElementById('menu-page-lvl').textContent = `Level: ${value}`;
     document.getElementById('game-page-lvl').textContent = `Level: ${value}`;
 });
@@ -242,7 +242,7 @@ menuHider.addEventListener('click', () => {
     document.querySelector('.game-page').classList.toggle('hidden');
     gameSpeed = 1200 - level.value * 100;
     gameStatus = true;
-    setGameStatus(gameStatus, gameSpeed);
+    // setGameStatus(gameStatus, gameSpeed);
 });
 menuOpener.addEventListener('click', () => {
     document.querySelector('.menu-page').classList.toggle('hidden');
@@ -251,20 +251,7 @@ menuOpener.addEventListener('click', () => {
     setGameStatus(gameStatus, gameSpeed);
 });
 
-function setGameStatus(gameStatus, gameSpeed) {
-    if (gameStatus) {
-        getFigure();
-        interval = setInterval(() => {
-            move(0, -1);
-        }, gameSpeed);
-    } else {
-        clearInterval(interval);
-        for (let i = 0; i < tetrisCells; i++) {
-            excel[i].classList.remove('figure');
-            excel[i].removeAttribute('stuckedFigure');
-        }
-    }
-}
+
 // Перемещение фигуры по нажатию клавиш
 window.addEventListener('keydown', function(event) {
     if (event.key == 'ArrowLeft') {
@@ -361,17 +348,8 @@ function move(xDirection, yDirection) {
             getFigure();
         }
     } else if (xDirection == 1 || xDirection == -1) {
-        let newFigureBody = changeFigureBodyCoordinates(coordinates, xDirection, yDirection);
-        for (let i = 0; i < newFigureBody.length; i++) {
-            if (!newFigureBody[i] || newFigureBody[i].hasAttribute('stuckedFigure', '')) {
-                moveFlag = false;
-            }
-        }
-        if (moveFlag) {
-            removeFigureClass(figureBody);
-            figureBody = newFigureBody;
-            addFigureClass(figureBody);
-        }
+        let figureNew = changeFigureBodyCoordinates(coordinates, xDirection, yDirection);
+        checkNeighbourBlock(figureNew, moveFlag);
     } else if (yDirection == 1) {
 
         let figureNew = [
@@ -384,17 +362,7 @@ function move(xDirection, yDirection) {
             document.querySelector(`[posX = "${+coordinates[3][0] + figuresArray[currentFigure][rotate + 2][3][0]}"][posY = "${
             +coordinates[3][1] + figuresArray[currentFigure][rotate + 2][3][1]}"]`),
         ];
-        for (let i = 0; i < figureNew.length; i++) {
-            if (!figureNew[i] || figureNew[i].hasAttribute('stuckedFigure')) {
-                moveFlag = false;
-            }
-        }
-        if (moveFlag) {
-            removeFigureClass(figureBody);
-            figureBody = figureNew;
-            addFigureClass(figureBody);
-        }
-
+        checkNeighbourBlock(figureNew, moveFlag);
         if (rotate < 4) {
             rotate++;
         } else {
@@ -403,16 +371,44 @@ function move(xDirection, yDirection) {
     }
 }
 
+function checkNeighbourBlock(figureNew, moveFlag) {
+    for (let i = 0; i < figureNew.length; i++) {
+        if (!figureNew[i] || figureNew[i].hasAttribute('stuckedFigure')) {
+            moveFlag = false;
+        }
+    }
+    if (moveFlag) {
+        removeFigureClass(figureBody);
+        figureBody = figureNew;
+        addFigureClass(figureBody);
+    }
+}
+
+//Установка состояния игры
+function setGameStatus(gameStatus, gameSpeed) {
+    if (gameStatus) {
+        getFigure();
+        interval = setInterval(() => {
+            move(0, -1);
+        }, gameSpeed);
+    } else {
+        clearInterval(interval);
+        for (let i = 0; i < tetrisCells; i++) {
+            excel[i].classList.remove('figure');
+            excel[i].removeAttribute('stuckedFigure');
+        }
+    }
+}
 
 // Изменение координат фигуры
 function changeFigureBodyCoordinates(coordinates, xDirection, yDirection) {
-    let newFigureBody = [
+    let changedFigureBody = [
         document.querySelector(`[posX = "${+coordinates[0][0]+xDirection}"][posY= "${+coordinates[0][1]+yDirection}"]`),
         document.querySelector(`[posX = "${+coordinates[1][0]+xDirection}"][posY= "${+coordinates[1][1]+yDirection}"]`),
         document.querySelector(`[posX = "${+coordinates[2][0]+xDirection}"][posY= "${+coordinates[2][1]+yDirection}"]`),
         document.querySelector(`[posX = "${+coordinates[3][0]+xDirection}"][posY= "${+coordinates[3][1]+yDirection}"]`),
     ];
-    return newFigureBody;
+    return changedFigureBody;
 }
 
 //Установка размеров клетки
