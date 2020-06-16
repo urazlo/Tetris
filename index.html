@@ -2,35 +2,36 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Ultra&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="menu-page">
-        <div style="font-size: 45px;">Menu</div>
-        <div class="menu-page__elems">
-            <div id="menu-page-lvl">Level: 1</div>
-            <input type="range" min="1" max="10" step="1" value="1" class="menu-page__btn-lvl">
-            <button class="menu-page__btn-start btn--style">Start</button>
-        </div>
+  <audio src="Jesper Kyd - Ezio_s Family.mp3" autoplay></audio>
+  <div class="menu-page">
+    <div style="font-size: 45px;">Menu</div>
+    <div class="menu-page__elems">
+      <div id="menu-page-lvl">Level: 1</div>
+      <input type="range" min="1" max="10" step="1" value="1" class="menu-page__btn-lvl">
+      <button class="menu-page__btn-start btn--style">Start</button>
     </div>
-    <div class="game-page hidden">
-        <div class="game-page__left-bar">
-            <button class="game-page__left-bar__btn-menu btn--style">Menu</button>
-            <div class="game-page__left-bar__next-figure">Field</div>
-            <div id="game-page-lvl">Level: 1</div>
-        </div>
-        <div class="game-page__right-bar">
-            <button class="game-page__right-bar__btn-mute btn--style">Mute</button>
-            <div class="game-page__right-bar__score">Score: 0</div>
-            <div class="game-page__right-bar__record">Record: 0</div>
-        </div>
-        <div class="game-page__tetris-front"></div>
+  </div>
+  <div class="game-page hidden">
+    <div class="game-page__left-bar">
+      <button class="game-page__left-bar__btn-menu btn--style">Menu</button>
+      <div class="game-page__left-bar__next-figure"></div>
+      <div id="game-page-lvl">Level: 1</div>
     </div>
-    <script src="script.js">
-    </script>
+    <div class="game-page__right-bar">
+      <button class="game-page__right-bar__btn-mute btn--style">Mute</button>
+      <div class="game-page__right-bar__score">Score: 0</div>
+      <div class="game-page__right-bar__record">Record: 0</div>
+    </div>
+    <div class="game-page__tetris-front"></div>
+  </div>
+  <script src="script.js">
+  </script>
 </body>
 
 </html>
