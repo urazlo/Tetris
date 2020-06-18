@@ -22,10 +22,11 @@ const inicialX = 5;
 const inicialY = 15;
 const nextFigureInicialX = 2;
 const nextFigureInicialY = 1;
-const gameStats = {
-  score: 0,
-  record: 0,
-};
+const figureColorClasses = ['figureBlue', 'figureRed', 'figureGreen', 'figurePurple', 'figureLightBlue'];
+
+let score = 0;
+let record = 0;
+let currentColor;
 let interval;
 let difficulty;
 let linesClearedPerLvl = 0;
@@ -39,6 +40,7 @@ let rotate = 1;
 let nextFigureFlag = false;
 let rotationFlag = true;
 let mute = true;
+let figureColor;
 let figuresArray = [
   [
     [0, 1],
@@ -248,7 +250,6 @@ let figuresArray = [
 
 //music
 audioBtn.addEventListener('click', () => {
-
   let audio = document.getElementsByTagName('audio')[0];
   if (mute) {
     mute = !mute;
@@ -267,27 +268,23 @@ level.addEventListener('mouseup', () => {
 
 // Переключатель меню 
 menuHider.addEventListener('click', () => {
-  document.querySelector('.menu-page').classList.toggle('hidden');
-  document.querySelector('.game-page').classList.toggle('hidden');
+  menuToggle();
   gameStatus = true;
   nextFigureFlag = false;
-  gameStats.score = 0;
+  score = 0;
   gameSpeed -= level.value * 100;
-  document.getElementsByClassName('game-page__right-bar__score')[0].textContent = `Score: ${gameStats.score}`;
-  removeFigureClass(nextFigureBody);
+  document.getElementsByClassName('game-page__right-bar__score')[0].textContent = `Score: ${score}`;
+  removeColorClass(nextFigureBody, figureColor);
   getNextFigure();
   setGameStatus(gameStatus, gameSpeed);
 });
-
 menuOpener.addEventListener('click', () => {
-  document.querySelector('.menu-page').classList.toggle('hidden');
-  document.querySelector('.game-page').classList.toggle('hidden');
+  menuToggle();
+  removeColorClass(nextFigureBody, figureColor);
   gameStatus = false;
   gameSpeed = 1200;
   setGameStatus(gameStatus, gameSpeed);
 });
-
-
 
 // Перемещение фигуры по нажатию клавиш
 window.addEventListener('keydown', function (event) {
@@ -304,6 +301,12 @@ window.addEventListener('keydown', function (event) {
 
 //ФУНКЦИИ
 
+//Переключение меню
+function menuToggle() {
+  document.querySelector('.menu-page').classList.toggle('hidden');
+  document.querySelector('.game-page').classList.toggle('hidden');
+}
+
 //Заполнение игрового поля
 function drawFill() {
   tetrisBackField.classList.add('game-page__tetris-back');
@@ -315,7 +318,8 @@ function drawFill() {
   tetrisFrontField.appendChild(tetrisBackField);
 }
 
-function showNextFigure() {
+//Отрисовка следующей фигуры
+function drawNextFigure() {
   tetrisNextFigureField.classList.add('game-page__left-bar__next-figure');
   for (let i = 0; i < nextFigureFieldCells; i++) {
     let nextFigureFieldDiv = document.createElement('div');
@@ -337,17 +341,40 @@ function setCellsCoorinates() {
 }
 
 //Добавляем клеткам фигуры класс "figure"
-function addFigureClass(figureBody) {
+function addColorClass(figureBody, figureColor) {
   for (let i = 0; i < figureBody.length; i++) {
-    figureBody[i].classList.add('figure');
+    if (figureColor == (`${figureColorClasses[0]}`)) {
+      figureBody[i].classList.add((`${figureColorClasses[0]}`));
+    } else if (figureColor == (`${figureColorClasses[1]}`)) {
+      figureBody[i].classList.add((`${figureColorClasses[1]}`));
+    } else if (figureColor == (`${figureColorClasses[2]}`)) {
+      figureBody[i].classList.add((`${figureColorClasses[2]}`));
+    } else if (figureColor == (`${figureColorClasses[3]}`)) {
+      figureBody[i].classList.add((`${figureColorClasses[3]}`));
+    } else {
+      figureBody[i].classList.add((`${figureColorClasses[4]}`));
+    }
   }
 }
 
 //Удаляем у клеток фигуры класс "figure"
-function removeFigureClass(figureBody) {
+function removeColorClass(figureBody) {
   for (let i = 0; i < figureBody.length; i++) {
-    figureBody[i].classList.remove('figure');
+    figureBody[i].classList.remove(`${figureColorClasses[0]}`);
+    figureBody[i].classList.remove(`${figureColorClasses[1]}`);
+    figureBody[i].classList.remove(`${figureColorClasses[2]}`);
+    figureBody[i].classList.remove(`${figureColorClasses[3]}`);
+    figureBody[i].classList.remove(`${figureColorClasses[4]}`);
   }
+}
+
+//Установка цвета фигуры
+function setFigureColor() {
+  function getRandom() {
+    return Math.round(Math.random() * (figureColorClasses.length - 1));
+  }
+  figureColor = figureColorClasses[getRandom()];
+  return figureColor;
 }
 
 //Получение случайной фигуры
@@ -360,16 +387,26 @@ function getFigure(nextFigureFlag) {
   if (nextFigureFlag) {
     currentFigure = nextFigure;
   }
-
   figureBody = [
     document.querySelector(`[posX="${inicialX}"][posY="${inicialY}"]`),
     document.querySelector(`[posX="${inicialX + figuresArray[currentFigure][0][0]}"][posY="${inicialY + figuresArray[currentFigure][0][1]}"]`),
     document.querySelector(`[posX="${inicialX + figuresArray[currentFigure][1][0]}"][posY="${inicialY + figuresArray[currentFigure][1][1]}"]`),
     document.querySelector(`[posX="${inicialX + figuresArray[currentFigure][2][0]}"][posY="${inicialY + figuresArray[currentFigure][2][1]}"]`),
   ];
-  addFigureClass(figureBody);
+  addColorClass(figureBody, figureColor);
 }
 
+// function getFigureBody(inicialX, inicialY, posX, posY) {
+//   figureBody = [
+//     document.querySelector(`[${posX}="${inicialX}"][${posY}="${inicialY}"]`),
+//     document.querySelector(`[${posX}="${inicialX + figuresArray[currentFigure][0][0]}"][${posY}="${inicialY + figuresArray[currentFigure][0][1]}"]`),
+//     document.querySelector(`[${posX}="${inicialX + figuresArray[currentFigure][1][0]}"][${posY}="${inicialY + figuresArray[currentFigure][1][1]}"]`),
+//     document.querySelector(`[${posX}="${inicialX + figuresArray[currentFigure][2][0]}"][${posY}="${inicialY + figuresArray[currentFigure][2][1]}"]`),
+//   ];
+//   return figureBody;
+// }
+
+//Получение следующей фигуры
 function getNextFigure() {
   function getRandom() {
     return Math.round(Math.random() * (figuresArray.length - 1));
@@ -381,10 +418,13 @@ function getNextFigure() {
     document.querySelector(`[posXnext="${nextFigureInicialX + figuresArray[nextFigure][1][0]}"][posYnext="${nextFigureInicialY + figuresArray[nextFigure][1][1]}"]`),
     document.querySelector(`[posXnext="${nextFigureInicialX + figuresArray[nextFigure][2][0]}"][posYnext="${nextFigureInicialY + figuresArray[nextFigure][2][1]}"]`),
   ];
-  addFigureClass(nextFigureBody);
+  currentColor = figureColor;
+  figureColor = setFigureColor();
+  addColorClass(nextFigureBody, figureColor);
   return nextFigure;
 }
 
+//Установка координат следующей фигуры
 function setNextFigureCellsCoorinates() {
   let i = 0;
   for (let y = 4; y > 0; y--) {
@@ -398,7 +438,6 @@ function setNextFigureCellsCoorinates() {
 
 // Передвижение фигуры
 function move(xDirection, yDirection) {
-  console.log(gameSpeed, level.value);
   let moveFlag = true;
   let coordinates = [
     [figureBody[0].getAttribute('posX'), figureBody[0].getAttribute('posY')],
@@ -407,8 +446,8 @@ function move(xDirection, yDirection) {
     [figureBody[3].getAttribute('posX'), figureBody[3].getAttribute('posY')],
   ];
   if (yDirection == -1) {
-    document.getElementsByClassName('game-page__right-bar__score')[0].textContent = `Score: ${gameStats.score}`;
-    document.getElementsByClassName('game-page__right-bar__record')[0].textContent = `Record: ${gameStats.record}`;
+    document.getElementsByClassName('game-page__right-bar__score')[0].textContent = `Score: ${score}`;
+    document.getElementsByClassName('game-page__right-bar__record')[0].textContent = `Record: ${localStorage.getItem('record')}`;
     for (let i = 0; i < coordinates.length; i++) {
       if (coordinates[i][1] == 1 || document.querySelector(`[posX = "${coordinates[i][0]}"][posY= "${coordinates[i][1] - 1}"]`).hasAttribute('stuckedFigure')) {
         moveFlag = false;
@@ -416,46 +455,41 @@ function move(xDirection, yDirection) {
       }
     }
     if (moveFlag) {
-      removeFigureClass(figureBody);
+      removeColorClass(figureBody);
       figureBody = changeFigureBodyCoordinates(coordinates, xDirection, yDirection);
-      addFigureClass(figureBody);
+      addColorClass(figureBody, currentColor);
     } else {
       for (let i = 0; i < figureBody.length; i++) {
         figureBody[i].setAttribute('stuckedFigure', '');
       }
-      for (let i = 1; i < 15; i++) {
+      for (let y = 1; y < 15; y++) {
         let fullLineCount = 0;
-        for (let k = 1; k < 11; k++) {
-          if (document.querySelector(`[posX = "${k}"][posY = "${i}"]`).hasAttribute('stuckedFigure')) {
+        for (let x = 1; x < 11; x++) {
+          if (document.querySelector(`[posX = "${x}"][posY = "${y}"]`).hasAttribute('stuckedFigure')) {
             fullLineCount++;
             if (fullLineCount == 10) {
               linesClearedPerLvl++;
-              if (linesClearedPerLvl == 2) {
+              if (linesClearedPerLvl == 1) {
                 changeGameSpeed();
               }
-              gameStats.score += 50 * level.value;
-              if (gameStats.score > gameStats.record) {
-                gameStats.record = gameStats.score;
+              score += 50 * level.value;
+              if (score > localStorage.getItem('record')) {
+                localStorage.setItem('record', record = score);
               }
-              for (let m = 1; m < 11; m++) {
-                document.querySelector(`[posX = "${m}"][posY = "${i}"]`).removeAttribute('stuckedFigure');
-                document.querySelector(`[posX = "${m}"][posY = "${i}"]`).classList.remove('figure');
-              }
-              let stuckedFiguresArray = Array.from(document.querySelectorAll('[stuckedFigure]'));
-              let newStuckedFiguresArray = [];
-              for (let s = 0; s < stuckedFiguresArray.length; s++) {
-                let stuckedFiguresCoordinates = [stuckedFiguresArray[s].getAttribute('posX'), stuckedFiguresArray[s].getAttribute('posY')];
-                if (stuckedFiguresCoordinates[1] > i) {
-                  stuckedFiguresArray[s].removeAttribute('stuckedFigure');
-                  stuckedFiguresArray[s].classList.remove('figure');
-                  newStuckedFiguresArray.push(document.querySelector(`[posX = "${stuckedFiguresCoordinates[0]}"][posY = "${stuckedFiguresCoordinates[1] - 1}"]`));
+              for (let x2 = 1; x2 < 11; x2++) {
+                for (let y2 = y; y2 < 15 - y; y2++) {
+                  const nextCell = document.querySelector(`[posX = "${x2}"][posY = "${y2 + 1}"]`); // Фигура выше 
+                  const currentCell = document.querySelector(`[posX = "${x2}"][posY = "${y2}"]`); // Текущая
+                  currentCell.className = nextCell.className; // Копируем всё
+
+                  if (nextCell.hasAttribute('stuckedFigure')) {
+                    currentCell.setAttribute('stuckedFigure', '');
+                  } else {
+                    currentCell.removeAttribute('stuckedFigure');
+                  }
                 }
               }
-              for (let a = 0; a < newStuckedFiguresArray.length; a++) {
-                newStuckedFiguresArray[a].setAttribute('stuckedFigure', '');
-                newStuckedFiguresArray[a].classList.add('figure');
-              }
-              i--;
+              y--;
             }
           }
         }
@@ -465,14 +499,13 @@ function move(xDirection, yDirection) {
           gameSpeed = 1200;
           level.value = 1;
           setGameStatus(false, gameSpeed);
-          confirm(`Game over. Your score is ${gameStats.score}. Current record is ${gameStats.record}`);
+          confirm(`Game over. Your score is ${score}. Current record is ${localStorage.getItem('record')}`);
           document.getElementById('menu-page-lvl').textContent = `Level: ${level.value}`;
-          document.querySelector('.menu-page').classList.toggle('hidden');
-          document.querySelector('.game-page').classList.toggle('hidden');
+          menuToggle();
           break;
         }
       }
-      removeFigureClass(nextFigureBody);
+      removeColorClass(nextFigureBody);
       getFigure(true);
       getNextFigure();
     }
@@ -484,9 +517,9 @@ function move(xDirection, yDirection) {
       }
     }
     if (moveFlag) {
-      removeFigureClass(figureBody);
+      removeColorClass(figureBody);
       figureBody = figureNew;
-      addFigureClass(figureBody);
+      addColorClass(figureBody, currentColor);
     }
   } else if (yDirection == 1) {
     rotationFlag = true;
@@ -506,9 +539,9 @@ function move(xDirection, yDirection) {
       }
     }
     if (rotationFlag) {
-      removeFigureClass(figureBody);
+      removeColorClass(figureBody);
       figureBody = figureNew;
-      addFigureClass(figureBody);
+      addColorClass(figureBody, currentColor);
       if (rotate < 4) {
         rotate++;
       } else {
@@ -528,7 +561,11 @@ function setGameStatus(gameStatus, gameSpeed) {
   } else {
     clearInterval(interval);
     for (let i = 0; i < tetrisCells; i++) {
-      excel[i].classList.remove('figure');
+      excel[i].classList.remove('figureBlue');
+      excel[i].classList.remove('figureRed');
+      excel[i].classList.remove('figureGreen');
+      excel[i].classList.remove('figurePurple');
+      excel[i].classList.remove('figureLightBlue');
       excel[i].removeAttribute('stuckedFigure');
     }
   }
@@ -536,14 +573,16 @@ function setGameStatus(gameStatus, gameSpeed) {
 
 //Изменение скорости игры
 function changeGameSpeed() {
-  linesClearedPerLvl = 0;
-  clearInterval(interval);
-  gameSpeed -= 100;
-  level.value = Number(level.value) + 1;
-  document.getElementById('game-page-lvl').textContent = `Level: ${level.value}`;
-  interval = setInterval(() => {
-    move(0, -1);
-  }, gameSpeed);
+  if (Number(level.value) < 10) {
+    linesClearedPerLvl = 0;
+    clearInterval(interval);
+    gameSpeed -= 100;
+    level.value = Number(level.value) + 1;
+    document.getElementById('game-page-lvl').textContent = `Level: ${level.value}`;
+    interval = setInterval(() => {
+      move(0, -1);
+    }, gameSpeed);
+  }
 }
 
 // Изменение координат фигуры
@@ -567,6 +606,7 @@ function setCellSize() {
   }
 }
 
+//Установка размеров клетки следующей фигуры
 function setNextFigureCellSize() {
   for (let i = 0; i < nextFigureCellsArray.length; i++) {
     nextFigureCellsArray[i].style.width = `${cellSize}px`;
@@ -575,6 +615,7 @@ function setNextFigureCellSize() {
     nextFigureCellsArray[i].style.borderBottom = `${cellBorderWidth}px solid #FFB800`;
   }
 }
+
 //Установка размеров игрового поля
 function setTetrisFieldSize() {
   document.querySelector('.game-page__tetris-front').style.width = `${tetrisFieldWidth}px`;
@@ -585,10 +626,9 @@ function setTetrisFieldSize() {
 }
 
 drawFill();
-showNextFigure();
+drawNextFigure();
 setCellsCoorinates();
 setNextFigureCellsCoorinates();
 setCellSize();
 setNextFigureCellSize();
 setTetrisFieldSize();
-
